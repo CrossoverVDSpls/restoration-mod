@@ -4367,6 +4367,9 @@ function BlackMarketGui:update_info_text()
 		if slot_data.ignore_slot then
 			-- Nothing
 		elseif not slot_data.empty_slot then
+			local weapon_id = slot_data.name
+			local weapon_tweak = weapon_id and tweak_data.weapon[weapon_id]
+
 			updated_texts[1].text = slot_data.name_localized
 
 			if slot_data.name_color then
@@ -4377,12 +4380,28 @@ function BlackMarketGui:update_info_text()
 			end
 
 			local resource_color = {}
+			updated_texts[2].ignore_scale = true
 			updated_texts[2].resource_color = resource_color
 
-			if price > 0 then
-				updated_texts[2].text = "##" .. managers.localization:to_upper_text(slot_data.not_moddable and "st_menu_cost" or "st_menu_value") .. " " .. managers.experience:cash_string(price) .. "##"
+			local weapon_category = nil
+			local is_akimbo = false
+			if weapon_tweak and weapon_tweak.categories then
+				if weapon_tweak.categories[1] == "akimbo" then
+					is_akimbo = true
+				end
+				weapon_category = is_akimbo and weapon_tweak.categories[2] or weapon_tweak.categories[1]
+			end
 
-				table.insert(resource_color, slot_data.can_afford and tweak_data.screen_colors.text or tweak_data.screen_colors.important_1)
+			if price > 0 then
+				updated_texts[2].text = managers.localization:to_upper_text(slot_data.not_moddable and "st_menu_cost" or "st_menu_value") .. " ##" .. managers.experience:cash_string(price) .. "##"
+
+				table.insert(resource_color, slot_data.can_afford and tweak_data.screen_colors.skill_color or tweak_data.screen_colors.important_1)
+			end
+
+			if weapon_category then
+				updated_texts[2].text = updated_texts[2].text .. ((price > 0 and " | ") or "") .. managers.localization:to_upper_text("st_menu_skill_use") .." ##" .. ((is_akimbo and managers.localization:to_upper_text("menu_akimbo")) or "") .. managers.localization:to_upper_text("menu_" .. tostring(weapon_category) .. "_single") .. "##"
+
+				table.insert(resource_color, tweak_data.screen_colors.skill_color)
 			end
 
 			if not slot_data.not_moddable and not self._data.is_loadout then
@@ -4452,9 +4471,6 @@ function BlackMarketGui:update_info_text()
 				updated_texts[4].below_stats = true
 			end
 			
-			local weapon_id = slot_data.name
-			local weapon_tweak = weapon_id and tweak_data.weapon[weapon_id]
-
 			local selection_index = tweak_data:get_raw_value("weapon", self._slot_data.name, "use_data", "selection_index") or 1
 			local category = (selection_index == 1 and "secondaries") or (selection_index == 2 and "primaries") or "disabled"
 			if category == slot_data.category then
@@ -4590,11 +4606,11 @@ function BlackMarketGui:update_info_text()
 		if slot_data.name == "weapon" and (bayonet_damage or (range and range > 0)) then
 			updated_texts[2].resource_color = tweak_data.screen_colors.skill_color
 			updated_texts[2].text = (updated_texts[2].text ~= "" and updated_texts[2].text .. "\n\n" or "") .. 
-				"STATS FROM PRIMARY:" .. 
-				(damage_total and "\nADDITIONAL DAMAGE: ##+" .. tostring(damage_total) .. "##" or "") .. 
-				(bayonet_damage and skill_damage and skill_damage > 0 and "\n-BASE: ##" .. tostring(bayonet_damage) .. "##" or "") .. 
-				(bayonet_damage and skill_damage and skill_damage > 0 and "\n-SKILL: ##+" .. tostring(skill_damage) .. "##" or "") .. 
-				(range and range > 0 and "\nADDITIONAL RANGE: ##+" .. tostring(range) .. "m##" or "")
+				managers.localization:text("bm_menu_weapon_bayonet_header") .. 
+				(damage_total and managers.localization:text("bm_menu_weapon_bayonet_damage") .. tostring(damage_total) .. "##" or "") .. 
+				(bayonet_damage and skill_damage and skill_damage > 0 and managers.localization:text("bm_menu_weapon_bayonet_damage_base") .. tostring(bayonet_damage) .. "##" or "") .. 
+				(bayonet_damage and skill_damage and skill_damage > 0 and managers.localization:text("bm_menu_weapon_bayonet_damage_skill") .. tostring(skill_damage) .. "##" or "") .. 
+				(range and range > 0 and managers.localization:text("bm_menu_weapon_bayonet_range") .. tostring(range) .. "m##" or "")
 
 			updated_texts[2].below_stats = true
 		end
@@ -5628,13 +5644,14 @@ function BlackMarketGui:update_info_text()
 				local color_index_string = managers.localization:to_upper_text("bm_menu_weapon_color_index", {
 					variation = managers.localization:text(tweak_data.blackmarket:get_weapon_color_index_string(slot_data.cosmetic_color_index))
 				})
+				local quality_id = tweak_data.economy.qualities[cosmetic_quality] and tweak_data.economy.qualities[cosmetic_quality].name_id and cosmetic_quality or "mint"
 				local quality_string = managers.localization:to_upper_text("bm_menu_weapon_color_quality", {
-					quality = managers.localization:text(tweak_data.economy.qualities[cosmetic_quality].name_id)
+					quality = managers.localization:text(tweak_data.economy.qualities[quality_id].name_id)
 				})
 				updated_texts[4].text = updated_texts[4].text .. name_string .. "\n" .. color_index_string .. "\n" .. quality_string
 
 				table.insert(updated_texts[4].resource_color, tweak_data.screen_colors.text)
-				table.insert(updated_texts[4].resource_color, tweak_data.economy.qualities[cosmetic_quality].color or tweak_data.screen_colors.text)
+				table.insert(updated_texts[4].resource_color, tweak_data.economy.qualities[quality_id].color or tweak_data.screen_colors.text)
 			else
 				updated_texts[4].text = updated_texts[4].text .. managers.localization:text("bm_menu_customizable_weapon_color_desc")
 			end
@@ -5838,13 +5855,13 @@ function BlackMarketGui:update_info_text()
 	end
 
 	local below_y = nil
-	local resmod_scale = 0.95
 	
 	for i = 2, #self._info_texts do
 		local info_text = self._info_texts[i]
+		local resmod_scale = 0.95
 
 		info_text:set_font_size(small_font_size * resmod_scale)
-		info_text:set_w(self._info_texts_panel:w())
+		info_text:set_w((updated_texts[i].ignore_scale and 10000) or self._info_texts_panel:w())
 
 		_, _, _, th = info_text:text_rect()
 

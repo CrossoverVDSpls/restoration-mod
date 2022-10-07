@@ -62,7 +62,7 @@ function RaycastWeaponBase:get_damage_type()
 	if self._rays and self._rays == 1 then
 		return self:weapon_tweak_data().damage_type_single_ray
 	else
-		return self:weapon_tweak_data().damage_type or "normal"
+		return self:weapon_tweak_data().object_damage_mult or 1
 	end
 end
 
@@ -124,6 +124,7 @@ function FlameBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage, b
 
 		--do a friendly fire check if the unit hit is a character or a character's shield before damaging the body extension that was hit
 		if damage_body_extension then
+			local object_damage_mult = alive(weapon_unit) and weapon_unit.base and weapon_unit:base().get_object_damage_mult and weapon_unit:base():get_object_damage_mult() or 1
 			local sync_damage = not blank and hit_unit:id() ~= -1
 			local network_damage = math.ceil(damage * 163.84)
 			damage = network_damage / 163.84
@@ -132,14 +133,14 @@ function FlameBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage, b
 				local normal_vec_yaw, normal_vec_pitch = self._get_vector_sync_yaw_pitch(col_ray.normal, 128, 64)
 				local dir_vec_yaw, dir_vec_pitch = self._get_vector_sync_yaw_pitch(col_ray.ray, 128, 64)
 
-				managers.network:session():send_to_peers_synched("sync_body_damage_bullet", col_ray.unit:id() ~= -1 and col_ray.body or nil, user_unit:id() ~= -1 and user_unit or nil, normal_vec_yaw, normal_vec_pitch, col_ray.position, dir_vec_yaw, dir_vec_pitch, math.min(16384, network_damage))
+				managers.network:session():send_to_peers_synched("sync_body_damage_bullet", col_ray.unit:id() ~= -1 and col_ray.body or nil, user_unit:id() ~= -1 and user_unit or nil, normal_vec_yaw, normal_vec_pitch, col_ray.position, dir_vec_yaw, dir_vec_pitch, math.min(16384, network_damage * object_damage_mult))
 			end
 
 			local local_damage = not blank or hit_unit:id() == -1
 
 			if local_damage then
 				col_ray.body:extension().damage:damage_bullet(user_unit, col_ray.normal, col_ray.position, col_ray.ray, 1)
-				col_ray.body:extension().damage:damage_damage(user_unit, col_ray.normal, col_ray.position, col_ray.ray, damage)
+				col_ray.body:extension().damage:damage_damage(user_unit, col_ray.normal, col_ray.position, col_ray.ray, damage * object_damage_mult)
 
 				if alive(weapon_unit) and weapon_unit:base().categories and weapon_unit:base():categories() then
 					for _, category in ipairs(weapon_unit:base():categories()) do
@@ -178,15 +179,17 @@ end
 
 --Minor fixes and making Winters unpiercable.
 function RaycastWeaponBase:_collect_hits(from, to)
-	local can_shoot_through = self._can_shoot_through_wall or self._can_shoot_through_shield or self._can_shoot_through_enemy
 	local hit_enemy = false
 	local has_hit_wall = false
+	local can_shoot_through_wall = self:can_shoot_through_wall()
+	local can_shoot_through_shield = self:can_shoot_through_shield()
+	local can_shoot_through_enemy = self:can_shoot_through_enemy()
 	local enemy_mask = managers.slot:get_mask("enemies")
 	local wall_mask = managers.slot:get_mask("world_geometry", "vehicles")
 	local shield_mask = managers.slot:get_mask("enemy_shield_check")
 	local ai_vision_ids = Idstring("ai_vision")
 	--Just set this immediately.
-	local ray_hits = self._can_shoot_through_wall and World:raycast_wall("ray", from, to, "slot_mask", self._bullet_slotmask, "ignore_unit", self._setup.ignore_units, "thickness", 40, "thickness_mask", wall_mask)
+	local ray_hits = can_shoot_through_wall and World:raycast_wall("ray", from, to, "slot_mask", self._bullet_slotmask, "ignore_unit", self._setup.ignore_units, "thickness", 40, "thickness_mask", wall_mask)
 		or World:raycast_all("ray", from, to, "slot_mask", self._bullet_slotmask, "ignore_unit", self._setup.ignore_units)
 	local units_hit = {}
 	local unique_hits = {}
@@ -198,11 +201,11 @@ function RaycastWeaponBase:_collect_hits(from, to)
 			local hit_enemy = hit_enemy or hit.unit:in_slot(enemy_mask)
 			local weak_body = hit.body:has_ray_type(ai_vision_ids)
 
-			if not self._can_shoot_through_enemy and hit_enemy then
+			if not can_shoot_through_enemy and hit_enemy then
 				break
-			elseif has_hit_wall or (not self._can_shoot_through_wall and hit.unit:in_slot(wall_mask) and weak_body) then
+			elseif has_hit_wall or (not can_shoot_through_wall and hit.unit:in_slot(wall_mask) and weak_body) then
 				break
-			elseif not self._can_shoot_through_shield and hit.unit:in_slot(shield_mask) then
+			elseif not can_shoot_through_shield and hit.unit:in_slot(shield_mask) then
 				break
 			elseif hit.unit:in_slot(shield_mask) and hit.unit:name():key() == 'af254947f0288a6c' and not self._can_shoot_through_titan_shield  then --Titan shields
 				break
@@ -223,6 +226,10 @@ function RaycastWeaponBase:_get_current_damage(dmg_mul)
 	   dmg_mul = dmg_mul / managers.player:temporary_upgrade_value("temporary", "overkill_damage_multiplier", 1)
    end
    return raycast_current_damage_orig(self, dmg_mul)
+end
+
+function RaycastWeaponBase:get_object_damage_mult()
+	return 1
 end
 
 function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage, blank, no_sound, already_ricocheted)
@@ -285,6 +292,7 @@ function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage,
 
 		--do a friendly fire check if the unit hit is a character or a character's shield before damaging the body extension that was hit
 		if damage_body_extension then
+			local object_damage_mult = alive(weapon_unit) and weapon_unit.base and weapon_unit:base().get_object_damage_mult and weapon_unit:base():get_object_damage_mult() or 1
 			local sync_damage = not blank and hit_unit:id() ~= -1
 			local network_damage = math.ceil(damage * 163.84)
 			damage = network_damage / 163.84
@@ -293,14 +301,14 @@ function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage,
 				local normal_vec_yaw, normal_vec_pitch = self._get_vector_sync_yaw_pitch(col_ray.normal, 128, 64)
 				local dir_vec_yaw, dir_vec_pitch = self._get_vector_sync_yaw_pitch(col_ray.ray, 128, 64)
 
-				managers.network:session():send_to_peers_synched("sync_body_damage_bullet", col_ray.unit:id() ~= -1 and col_ray.body or nil, user_unit:id() ~= -1 and user_unit or nil, normal_vec_yaw, normal_vec_pitch, col_ray.position, dir_vec_yaw, dir_vec_pitch, math.min(16384, network_damage))
+				managers.network:session():send_to_peers_synched("sync_body_damage_bullet", col_ray.unit:id() ~= -1 and col_ray.body or nil, user_unit:id() ~= -1 and user_unit or nil, normal_vec_yaw, normal_vec_pitch, col_ray.position, dir_vec_yaw, dir_vec_pitch, math.min(16384, network_damage * object_damage_mult))
 			end
 
 			local local_damage = not blank or hit_unit:id() == -1
 
 			if local_damage then
 				col_ray.body:extension().damage:damage_bullet(user_unit, col_ray.normal, col_ray.position, col_ray.ray, 1)
-				col_ray.body:extension().damage:damage_damage(user_unit, col_ray.normal, col_ray.position, col_ray.ray, damage)
+				col_ray.body:extension().damage:damage_damage(user_unit, col_ray.normal, col_ray.position, col_ray.ray, damage * object_damage_mult)
 
 				if alive(weapon_unit) and weapon_unit:base().categories and weapon_unit:base():categories() then
 					for _, category in ipairs(weapon_unit:base():categories()) do
@@ -337,6 +345,9 @@ end
 
 --Refactored from vanilla code for consistency and simplicity.
 function RaycastWeaponBase:add_ammo(ratio, add_amount_override)
+
+	local previous_total_ammo = self:get_ammo_total() -- "Ammo Pickup in HUD" compatibilty
+
 	local _add_ammo = function(ammo_base, ratio, add_amount_override)
 		if ammo_base:get_ammo_max() == ammo_base:get_ammo_total() then
 			return false, 0
@@ -371,7 +382,17 @@ function RaycastWeaponBase:add_ammo(ratio, add_amount_override)
 			add_amount = add_amount + a
 		end
 	end
+
+	if picked_up then -- "Ammo Pickup in HUD" compatibilty
+		local max_ammo = self:get_ammo_max()
+		local current_total_ammo = self:get_ammo_total()
+		local actual_add_amount = current_total_ammo - previous_total_ammo
+		local use_index = self:selection_index()
+		Hooks:Call("show_ammo_pickup_amount", self, actual_add_amount, use_index, add_amount, previous_total_ammo, current_total_ammo)
+	end
+
 	return picked_up, add_amount
+
 end
 
 local mvec_to = Vector3()
@@ -695,7 +716,8 @@ function RaycastWeaponBase:fire(from_pos, direction, dmg_mul, shoot_player, spre
 
 	local is_player = self._setup.user_unit == managers.player:player_unit()
 	local consume_ammo = not managers.player:has_active_temporary_property("bullet_storm") and (not managers.player:has_activate_temporary_upgrade("temporary", "berserker_damage_multiplier") or not managers.player:has_category_upgrade("player", "berserker_no_ammo_cost")) or not is_player
-	
+	local ammo_usage = self:ammo_usage()
+
 	for _, category in ipairs(self:weapon_tweak_data().categories) do
 		if category == "grenade_launcher" or category == "rocket_launcher" then
 			consume_ammo = true
@@ -719,7 +741,6 @@ function RaycastWeaponBase:fire(from_pos, direction, dmg_mul, shoot_player, spre
 			return
 		end
 
-		local ammo_usage = 1
 
 		if is_player then
 			for _, category in ipairs(self:weapon_tweak_data().categories) do
@@ -736,10 +757,15 @@ function RaycastWeaponBase:fire(from_pos, direction, dmg_mul, shoot_player, spre
 			end
 		end
 
-		local mag = base:get_ammo_remaining_in_clip()
-		local remaining_ammo = mag - ammo_usage
+		local ammo_in_clip = base:get_ammo_remaining_in_clip()
+		local remaining_ammo = ammo_in_clip - ammo_usage
 
-		if mag > 0 and remaining_ammo <= (self.AKIMBO and 1 or 0) then
+		if remaining_ammo < 0 then
+			ammo_usage = ammo_usage + remaining_ammo
+			remaining_ammo = 0
+		end
+
+		if ammo_in_clip > 0 and remaining_ammo <= (self.AKIMBO and 1 or 0) then
 			local w_td = self:weapon_tweak_data()
 
 			if w_td.animations and w_td.animations.magazine_empty then
@@ -757,7 +783,7 @@ function RaycastWeaponBase:fire(from_pos, direction, dmg_mul, shoot_player, spre
 			self:set_magazine_empty(true)
 		end
 
-		base:set_ammo_remaining_in_clip(base:get_ammo_remaining_in_clip() - ammo_usage)
+		base:set_ammo_remaining_in_clip(ammo_in_clip - ammo_usage)
 		self:use_ammo(base, ammo_usage)
 	end
 
@@ -771,7 +797,7 @@ function RaycastWeaponBase:fire(from_pos, direction, dmg_mul, shoot_player, spre
 
 	self:_spawn_shell_eject_effect()
 
-	local ray_res = self:_fire_raycast(user_unit, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul, target_unit)
+	local ray_res = self:_fire_raycast(user_unit, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul, target_unit, ammo_usage)
 
 	if self._alert_events and ray_res.rays then
 		self:_check_alert(ray_res.rays, from_pos, direction, user_unit)
@@ -969,6 +995,18 @@ function RaycastWeaponBase:anim_play(anim, speed_multiplier, set_offset, set_off
 	end
 end
 
+
+function DOTBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage, blank)
+	local result = DOTBulletBase.super.on_collision(self, col_ray, weapon_unit, user_unit, damage, blank, self.NO_BULLET_INPACT_SOUND)
+	local hit_unit = col_ray.unit
+
+	if result and hit_unit:character_damage() and hit_unit:character_damage().damage_dot and not hit_unit:character_damage():dead() and alive(weapon_unit) then
+		result = self:start_dot_damage(col_ray, weapon_unit, self:_dot_data_by_weapon(weapon_unit))
+	end
+
+	return result
+end
+
 BleedBulletBase = BleedBulletBase or class(DOTBulletBase)
 BleedBulletBase.VARIANT = "bleed"
 ProjectilesBleedBulletBase = ProjectilesBleedBulletBase or class(BleedBulletBase)
@@ -979,7 +1017,7 @@ function ProjectilesBleedBulletBase:on_collision(col_ray, weapon_unit, user_unit
 	local result = DOTBulletBase.super.on_collision(self, col_ray, weapon_unit, user_unit, damage, blank, self.NO_BULLET_INPACT_SOUND)
 	local hit_unit = col_ray.unit
 
-	if hit_unit:character_damage() and hit_unit:character_damage().damage_dot and not hit_unit:character_damage():dead() and alive(weapon_unit) then
+	if result and hit_unit:character_damage() and hit_unit:character_damage().damage_dot and not hit_unit:character_damage():dead() and alive(weapon_unit) then
 		local dot_data = tweak_data.projectiles[weapon_unit:base()._projectile_entry].dot_data
 
 		if not dot_data then

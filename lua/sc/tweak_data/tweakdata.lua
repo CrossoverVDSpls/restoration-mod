@@ -31,22 +31,22 @@ tweak_data.bow = {
 }
 tweak_data.crossbow = {
 	swap_bonus = 1,
-	ads_move_speed_mult = 0.45
+	ads_move_speed_mult = 0.5
 }
 	tweak_data.crossbow_pistol = {
-		ads_move_speed_mult = 1.7777,
+		ads_move_speed_mult = 1.6,
 		swap_bonus = 1.75
 	}
 
 tweak_data.grenade_launcher = {
-	ads_move_speed_mult = 0.45,
+	ads_move_speed_mult = 0.5,
 }
 	tweak_data.gl_pistol = {
-		ads_move_speed_mult = 1.7777,
+		ads_move_speed_mult = 1.6,
 		swap_bonus = 1.75
 	}
 	tweak_data.rocket_launcher = {
-		ads_move_speed_mult = 0.5,
+		ads_move_speed_mult = 0.4, --lowered to 0.2
 	}
 
 tweak_data.shotgun = {
@@ -67,11 +67,11 @@ tweak_data.smg = {
 	hipfire_spread_mult = 0.9
 }
 	tweak_data.pdw = {
-		ads_move_speed_mult = 0.6428,
+		ads_move_speed_mult = 0.7142857, --lowered to 0.5
 	}
 	tweak_data.lmg = {
 		swap_bonus = 0.8,
-		ads_move_speed_mult = 0.55,
+		ads_move_speed_mult = 0.428571, --lowered to 0.3
 		moving_spread_mult = 5,
 		hipfire_spread_mult = 4.4444
 	}
@@ -80,37 +80,39 @@ tweak_data.smg = {
 		}
 	tweak_data.minigun = {
 		swap_bonus = 0.8,
-		ads_move_speed_mult = 0.55,
+		ads_move_speed_mult = 0.428571, --lowered to 0.3
 		moving_spread_mult = 5,
 		hipfire_spread_mult = 4.4444
 	}
 
 tweak_data.snp = {
 	swap_bonus = 1,
-	ads_move_speed_mult = 0.45,
+	ads_move_speed_mult = 0.5,
 	hipfire_moving_spread_mult = 2
 }
 	tweak_data.semi_snp = {
 		hipfire_spread_mult = 1.5,
-		hipfire_moving_spread_mult = 1.5
+		hipfire_moving_spread_mult = 1.5,
+		ads_move_speed_mult = 0.6 --lowered to 0.3
 	}
 
 tweak_data.assault_rifle = {
 	swap_bonus = 1,
-	ads_move_speed_mult = 0.45
+	ads_move_speed_mult = 0.5
 }
 	tweak_data.crb = {
 		swap_bonus = 1.1,
-		ads_move_speed_mult = 1.111111
+		ads_move_speed_mult = 1.2 --raised to 0.6
 	}
 	tweak_data.dmr = {
 		hipfire_spread_mult = 1.5,
-		hipfire_moving_spread_mult = 1.5
+		hipfire_moving_spread_mult = 1.5,
+		ads_move_speed_mult = 0.7 --lowered to 0.4
 	}
 
 tweak_data.akimbo = {
 	swap_bonus = 0.8,
-	ads_move_speed_mult = 0.75,
+	ads_move_speed_mult = 0.8,
 	hipfire_spread_mult = 1.5
 }
 
@@ -183,7 +185,7 @@ for i, proj_id in ipairs(poison_40mm) do
 	tweak_data.projectiles[proj_id].curve_pow = 0
 	tweak_data.projectiles[proj_id].range = 0
 	tweak_data.projectiles[proj_id].poison_gas_range = 600
-	tweak_data.projectiles[proj_id].poison_gas_duration = 16
+	tweak_data.projectiles[proj_id].poison_gas_duration = 10
 	tweak_data.projectiles[proj_id].poison_gas_fade_time = 0.1
 	tweak_data.projectiles[proj_id].poison_gas_tick_time = 0.3
 	tweak_data.projectiles[proj_id].poison_gas_dot_data = {
@@ -222,7 +224,7 @@ tweak_data.projectiles.launcher_poison_arbiter.player_damage = 0
 tweak_data.projectiles.launcher_poison_arbiter.curve_pow = 0
 tweak_data.projectiles.launcher_poison_arbiter.range = 0
 tweak_data.projectiles.launcher_poison_arbiter.poison_gas_range = 600
-tweak_data.projectiles.launcher_poison_arbiter.poison_gas_duration = 12
+tweak_data.projectiles.launcher_poison_arbiter.poison_gas_duration = 8
 tweak_data.projectiles.launcher_poison_arbiter.poison_gas_fade_time = 0.1
 tweak_data.projectiles.launcher_poison_arbiter.poison_gas_tick_time = 0.3
 tweak_data.projectiles.launcher_poison_arbiter.poison_gas_dot_data = {
@@ -277,6 +279,27 @@ tweak_data.projectiles.launcher_electric_osipr = {
 	sound_event = "gl_explode",
 	name_id = "bm_launcher_frag"
 }
+tweak_data.projectiles.launcher_poison_osipr = {
+	launch_speed = 2500,
+	init_timer = 2.5,
+	mass_look_up_modifier = 0,
+	sound_event = "gl_explode",
+	name_id = "bm_launcher_frag",
+	damage = 0,
+	player_damage = 0,
+	curve_pow = 0,
+	range = 0,
+	poison_gas_range = 600,
+	poison_gas_duration = 8,
+	poison_gas_fade_time = 0.1,
+	poison_gas_tick_time = 0.3,
+	poison_gas_dot_data = {
+		hurt_animation_chance = 1,
+		dot_damage = 1.5,
+		dot_length = 6.15,
+		dot_tick_period = 0.5
+	}
+}
 
 --3GL
 tweak_data.projectiles.launcher_frag_ms3gl.damage = 36
@@ -302,7 +325,7 @@ tweak_data.projectiles.launcher_poison.player_damage = 0
 tweak_data.projectiles.launcher_poison.curve_pow = 0
 tweak_data.projectiles.launcher_poison.range = 0
 tweak_data.projectiles.launcher_poison.poison_gas_range = 600
-tweak_data.projectiles.launcher_poison.poison_gas_duration = 8
+tweak_data.projectiles.launcher_poison.poison_gas_duration = 6
 tweak_data.projectiles.launcher_poison.poison_gas_fade_time = 0.1
 tweak_data.projectiles.launcher_poison.poison_gas_tick_time = 0.3
 tweak_data.projectiles.launcher_poison.poison_gas_dot_data = {
@@ -318,7 +341,7 @@ tweak_data.projectiles.launcher_poison_ms3gl_conversion.player_damage = 0
 tweak_data.projectiles.launcher_poison_ms3gl_conversion.curve_pow = 0
 tweak_data.projectiles.launcher_poison_ms3gl_conversion.range = 0
 tweak_data.projectiles.launcher_poison_ms3gl_conversion.poison_gas_range = 600
-tweak_data.projectiles.launcher_poison_ms3gl_conversion.poison_gas_duration = 8
+tweak_data.projectiles.launcher_poison_ms3gl_conversion.poison_gas_duration = 6
 tweak_data.projectiles.launcher_poison_ms3gl_conversion.poison_gas_fade_time = 0.1
 tweak_data.projectiles.launcher_poison_ms3gl_conversion.poison_gas_tick_time = 0.3
 tweak_data.projectiles.launcher_poison_ms3gl_conversion.poison_gas_dot_data = {
@@ -443,7 +466,7 @@ tweak_data.projectiles.poison_gas_grenade.curve_pow = 0
 tweak_data.projectiles.poison_gas_grenade.range = 0
 tweak_data.projectiles.poison_gas_grenade.name_id = "bm_poison_gas_grenade"
 tweak_data.projectiles.poison_gas_grenade.poison_gas_range = 600
-tweak_data.projectiles.poison_gas_grenade.poison_gas_duration = 20
+tweak_data.projectiles.poison_gas_grenade.poison_gas_duration = 12
 tweak_data.projectiles.poison_gas_grenade.poison_gas_fade_time = 0.1
 tweak_data.projectiles.poison_gas_grenade.poison_gas_tick_time = 0.3
 tweak_data.projectiles.poison_gas_grenade.poison_gas_dot_data = {
@@ -1027,15 +1050,26 @@ local blight = {
 }
 table.insert(tweak_data.achievement.complete_heist_achievements, blight)
 
-tweak_data.player.stances.msr.steelsight.shakers.breathing.amplitude = 0
-tweak_data.player.stances.r93.steelsight.shakers.breathing.amplitude = 0
-tweak_data.player.stances.m95.steelsight.shakers.breathing.amplitude = 0
-tweak_data.player.stances.mosin.steelsight.shakers.breathing.amplitude = 0
-tweak_data.player.stances.winchester1874.steelsight.shakers.breathing.amplitude = 0
-tweak_data.player.stances.wa2000.steelsight.shakers.breathing.amplitude = 0
-tweak_data.player.stances.model70.steelsight.shakers.breathing.amplitude = 0
-tweak_data.player.stances.tti.steelsight.shakers.breathing.amplitude = 0
-tweak_data.player.stances.siltstone.steelsight.shakers.breathing.amplitude = 0
-tweak_data.player.stances.r700.steelsight.shakers.breathing.amplitude = 0
-tweak_data.player.stances.sbl.steelsight.shakers.breathing.amplitude = 0
-tweak_data.player.stances.desertfox.steelsight.shakers.breathing.amplitude = 0
+local twp = tweak_data.player
+local pivot_shoulder_translation
+local pivot_shoulder_rotation
+local pivot_head_translation
+local pivot_head_rotation
+--Can't get this shit to work in PlayerTweakData
+if twp.stances.m6d then
+	pivot_shoulder_translation = Vector3(8.47169, 40.6363, -2.73086)
+	pivot_shoulder_rotation = Rotation(0.100026, -0.68821, 0.629665)
+	pivot_head_translation = Vector3(4.5, 28, -6.25)
+	pivot_head_rotation = Rotation(0, 0, 0)
+	twp.stances.m6d.standard.shoulders.translation = pivot_head_translation - pivot_shoulder_translation:rotate_with(pivot_shoulder_rotation:inverse()):rotate_with(pivot_head_rotation)
+	twp.stances.m6d.standard.shoulders.rotation = pivot_head_rotation * pivot_shoulder_rotation:inverse()
+	pivot_head_translation = Vector3(-0.02, 35, 0.25)
+	pivot_head_rotation = Rotation(0, 0.5, 0)
+	twp.stances.m6d.steelsight.shoulders.translation = pivot_head_translation - pivot_shoulder_translation:rotate_with(pivot_shoulder_rotation:inverse()):rotate_with(pivot_head_rotation)
+	twp.stances.m6d.steelsight.shoulders.rotation = pivot_head_rotation * pivot_shoulder_rotation:inverse()
+	pivot_head_translation = Vector3(4.25, 26, -6.25)
+	pivot_head_rotation = Rotation(0, 0, 0)
+	twp.stances.m6d.crouched.shoulders.translation = pivot_head_translation - pivot_shoulder_translation:rotate_with(pivot_shoulder_rotation:inverse()):rotate_with(pivot_head_rotation)
+	twp.stances.m6d.crouched.shoulders.rotation = pivot_head_rotation * pivot_shoulder_rotation:inverse()
+end
+

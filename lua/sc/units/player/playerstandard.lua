@@ -1,3 +1,34 @@
+local norecoil_blacklist = { --From Zdann
+	--Special
+	["flamethrower_mk2"] = true,
+	["system"] = true,
+	["china"] = true,
+	
+	--Shotguns
+	["r870_shotgun"] = true,
+	["ksg"] = true,
+	["boot"] = true,
+	["m37"] = true,
+	["m1897"] = true,
+	["m590"] = true,
+	
+	--Sniper Rifles
+	["winchester1874"] = true,
+	["mosin"] = true,
+	["m95"] = true,
+	["r93"] = true,
+	["msr"] = true,
+	["model70"] = true,
+	["r700"] = true,
+	["sbl"] = true,
+	["desertfox"] = true,
+	["scout"] = true,
+	
+	--Pistols
+	["peacemaker"] = true,
+	["model3"] = true
+}
+
 local original_init = PlayerStandard.init
 function PlayerStandard:init(unit)
 	original_init(self, unit)
@@ -505,11 +536,11 @@ end
 
 ]]--
 
-
 function PlayerStandard:_check_action_primary_attack(t, input)
 	local new_action = nil
 	local action_wanted = input.btn_primary_attack_state or input.btn_primary_attack_release
 	action_wanted = action_wanted or self:is_shooting_count()
+	action_wanted = action_wanted or self:_is_charging_weapon()
 
 	if action_wanted then
 		local action_forbidden = self:_is_reloading() or self:_changing_weapon() or self:_is_meleeing() or self._use_item_expire_t or self:_interacting() and not managers.player:has_category_upgrade("player", "no_interrupt_interaction") or self:_is_throwing_projectile() or self:_is_deploying_bipod() or self._menu_closed_fire_cooldown > 0 or self:is_switching_stances()
@@ -553,6 +584,7 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 							local start = fire_mode == "single" and input.btn_primary_attack_press
 							start = start or fire_mode == "auto" and input.btn_primary_attack_state
 							start = start or fire_mode == "burst" and input.btn_primary_attack_press
+							start = start or fire_mode == "volley" and input.btn_primary_attack_press
 							start = start and not fire_on_release
 							start = start or fire_on_release and input.btn_primary_attack_release
 
@@ -626,6 +658,10 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 						end
 					elseif fire_mode == "burst" then
 						fired = weap_base:trigger_held(self:get_fire_weapon_position(), self:get_fire_weapon_direction(), dmg_mul, nil, spread_mul, autohit_mul, suppression_mul)
+					elseif fire_mode == "volley" then
+						if self._shooting then
+							fired = weap_base:trigger_held(self:get_fire_weapon_position(), self:get_fire_weapon_direction(), dmg_mul, nil, spread_mul, autohit_mul, suppression_mul)
+						end
 					end
 
 					if weap_base.manages_steelsight and weap_base:manages_steelsight() then
@@ -636,7 +672,7 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 						end
 					end
 
-					local charging_weapon = fire_on_release and weap_base:charging()
+					local charging_weapon = weap_base:charging()
 
 					if not self._state_data.charging_weapon and charging_weapon then
 						self:_start_action_charging_weapon(t)
@@ -653,7 +689,14 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 						local shake_multiplier = weap_tweak_data.shake[self._state_data.in_steelsight and "fire_steelsight_multiplier" or "fire_multiplier"]
 						local fire_anim_offset = weap_base:weapon_tweak_data().fire_anim_offset
 						local fire_anim_offset2 = weap_base:weapon_tweak_data().fire_anim_offset2
-
+						local vars = {
+							-1,
+							1
+						}
+						local random = vars[math.random(#vars)]
+						if self._state_data.in_steelsight and (restoration.Options:GetValue("OTHER/NoADSRecoilAnims") or weap_base._disable_steelsight_recoil_anim) then
+							self._ext_camera:play_shaker("whizby", random * 0.05 * shake_multiplier, vars[math.random(#vars)] * 0.25, vars[math.random(#vars)] * 0.25  )
+						end
 						self._ext_camera:play_shaker("fire_weapon_rot", 1 * shake_multiplier)
 						self._ext_camera:play_shaker("fire_weapon_kick", 1 * shake_multiplier * (self._state_data.in_steelsight and 0.2 or 1) , 1, 0.15)
 						self._equipped_unit:base():tweak_data_anim_stop("unequip")
@@ -664,10 +707,17 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 						end
 
 						if (fire_mode == "single" or fire_mode == "burst" or weap_base:weapon_tweak_data().no_auto_anims) and weap_base:get_name_id() ~= "saw" then
+
+							local weap_hold = weap_base.weapon_hold and weap_base:weapon_hold() or weap_base:get_name_id()
+							local is_bow = table.contains(weap_base:weapon_tweak_data().categories, "bow")
+							local force_ads_recoil_anims = weap_base and weap_base:weapon_tweak_data().always_play_anims
 							if not self._state_data.in_steelsight then
 								self._ext_camera:play_redirect(self:get_animation("recoil"), weap_base:fire_rate_multiplier())
 							elseif weap_tweak_data.animations.recoil_steelsight then
-								self._ext_camera:play_redirect(--[[weap_base:is_second_sight_on() and self:get_animation("recoil") or]]self:get_animation("recoil_steelsight"), 1)
+								if restoration.Options:GetValue("OTHER/NoADSRecoilAnims") and self._shooting and self._state_data.in_steelsight and not weap_base.akimbo and not is_bow and not norecoil_blacklist[weap_hold] and not force_ads_recoil_anims or weap_base._disable_steelsight_recoil_anim then
+								else
+									self._ext_camera:play_redirect(--[[weap_base:is_second_sight_on() and self:get_animation("recoil") or]]self:get_animation("recoil_steelsight"), 1)
+								end
 							end
 						end
 
@@ -675,7 +725,8 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 
 						cat_print("jansve", "[PlayerStandard] Weapon Recoil Multiplier: " .. tostring(recoil_multiplier))
 
-						local up, down, left, right = unpack(weap_tweak_data.kick[self._state_data.in_steelsight and "steelsight" or self._state_data.ducking and "crouching" or "standing"])
+						local kick_tweak_data = weap_tweak_data.kick[fire_mode] or weap_tweak_data.kick
+						local up, down, left, right = unpack(kick_tweak_data[self._state_data.in_steelsight and "steelsight" or self._state_data.ducking and "crouching" or "standing"])
 
 						self._camera_unit:base():recoil_kick(up * recoil_multiplier, down * recoil_multiplier, left * recoil_multiplier, right * recoil_multiplier)
 
@@ -720,10 +771,18 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 						elseif weap_base.akimbo and not weap_base:weapon_tweak_data().allow_akimbo_autofire or fire_mode == "single" or fire_mode == "burst" then
 							self._ext_network:send("shot_blank", impact, 0)
 						end
+
+						if fire_mode == "volley" then
+							self:_check_stop_shooting()
+						end
 					elseif fire_mode == "single" then
 						new_action = false
-					elseif fire_mode == "burst" and weap_base:shooting_count() == 0 then
-						new_action = false
+					elseif fire_mode == "burst" then
+						if weap_base:shooting_count() == 0 then
+							new_action = false
+						end
+					elseif fire_mode == "volley" then
+						new_action = self:_is_charging_weapon()
 					end
 				end
 			end
@@ -747,17 +806,43 @@ function PlayerStandard:_check_stop_shooting()
 		local weap_base = self._equipped_unit:base()
 		local fire_mode = weap_base:fire_mode()
 		local is_auto_fire_mode = fire_mode == "auto"
-
+		local is_volley_fire_mode = fire_mode == "volley"
+		if is_volley_fire_mode then
+			self:_end_action_charging_weapon()
+		end
 		if is_auto_fire_mode and (not weap_base.akimbo or weap_base:weapon_tweak_data().allow_akimbo_autofire) then
 			self._ext_network:send("sync_stop_auto_fire_sound", 0)
 		end
-
-		if is_auto_fire_mode and not self:_is_reloading() and not self:_is_meleeing() and not weap_base:weapon_tweak_data().no_auto_anims then
-			self._unit:camera():play_redirect(self:get_animation("recoil_exit"))
+		local weap_base = self._equipped_unit:base()	
+		local weap_hold = weap_base.weapon_hold and weap_base:weapon_hold() or weap_base:get_name_id()
+		local is_bow = table.contains(weap_base:weapon_tweak_data().categories, "bow")
+		local force_ads_recoil_anims = weap_base and weap_base:weapon_tweak_data().always_play_anims
+		if restoration.Options:GetValue("OTHER/NoADSRecoilAnims") and self._state_data.in_steelsight and not weap_base.akimbo and not is_bow and not norecoil_blacklist[weap_hold] and not force_ads_recoil_anims then
+			self._ext_camera:play_redirect(self:get_animation("idle"))
+		else 
+			if (is_auto_fire_mode or is_volley_fire_mode) and not self:_is_reloading() and not self:_is_meleeing() and not weap_base:weapon_tweak_data().no_auto_anims then
+				self._unit:camera():play_redirect(self:get_animation("recoil_exit"))
+			end
 		end
-
 		self._shooting = false
 		self._shooting_t = nil
+	end
+end
+
+function PlayerStandard:_start_action_charging_weapon(t)
+	self._state_data.charging_weapon = true
+	self._state_data.charging_weapon_data = {
+		t = t,
+		max_t = 2.5
+	}
+	local ANIM_LENGTH = 1.5
+	local max = self._equipped_unit:base():charge_max_t()
+	local speed_multiplier = ANIM_LENGTH / max
+	local weap_base = self._equipped_unit:base()
+	local no_charge_anims = weap_base:weapon_tweak_data().no_charge_anims
+	if not no_charge_anims then
+		self._equipped_unit:base():tweak_data_anim_play("charge", speed_multiplier)
+		self._ext_camera:play_redirect(self:get_animation("charge"), speed_multiplier)
 	end
 end
 
@@ -1448,7 +1533,7 @@ function PlayerStandard:_update_melee_timers(t, input)
 	local angle = self._stick_move and mvector3.angle(self._stick_move, math.Y)
 	local moving_forwards = angle and angle <= 15
 	local can_run = self._unit:movement():is_above_stamina_threshold()
-	local max_charge = self:_get_melee_charge_lerp_value(t) >= 1
+	local max_charge = self:_get_melee_charge_lerp_value(t) >= 0.99
 
 	-- No stamina regen while actively charging an attack with "charger" type melee weapons at max charge
 	if melee_charger and self._state_data.meleeing and max_charge then
@@ -1776,7 +1861,7 @@ end)
 function PlayerStandard:_shooting_move_speed_timer(t, dt)
 	local weapon = self._equipped_unit and self._equipped_unit:base()
 	if self._shooting and weapon._sms and (not self._is_sliding and not self._is_wallrunning and not self._is_wallkicking and not self:on_ladder()) then
-		self._shooting_move_speed_t = math.min(0.8, weapon._smt)
+		self._shooting_move_speed_t = math.min(0.7, weapon._smt)
 		--self._shooting_move_speed_wait = weapon._smt * 0.15
 		self._shooting_move_speed_mult = weapon._sms
 	end
@@ -1810,9 +1895,7 @@ function PlayerStandard:_primary_regen_ammo(t, dt)
 	end
 	if primary:clip_empty() then
 		if active and self._shooting then
-			self._equipped_unit:base():stop_shooting()
-			self._camera_unit:base():stop_shooting(self._equipped_unit:base():recoil_wait())
-			self._unit:camera():play_redirect(self:get_animation("recoil_exit"))
+			self:_check_stop_shooting()
 			self:_interupt_action_steelsight(t)
 		end
 		primary._primary_regen_rate = primary._regen_rate_overheat or 4.5
@@ -1881,9 +1964,7 @@ function PlayerStandard:_secondary_regen_ammo(t, dt)
 	end
 	if secondary:clip_empty() then
 		if active and self._shooting then
-			self._equipped_unit:base():stop_shooting()
-			self._camera_unit:base():stop_shooting(self._equipped_unit:base():recoil_wait())
-			self._unit:camera():play_redirect(self:get_animation("recoil_exit"))
+			self:_check_stop_shooting()
 			self:_interupt_action_steelsight(t)
 		end
 		secondary._secondary_regen_rate = secondary._regen_rate_overheat or 4.5
@@ -1949,10 +2030,6 @@ function PlayerStandard:_in_burst()
 end
 
 
---Check for being fully ADS'd
-function PlayerStandard:full_steelsight()
-	return self._state_data.in_steelsight and self._camera_unit:base():is_stance_done()
-end
 
 --ADS speed stuff
 function PlayerStandard:_stance_entered(unequipped, timemult)
@@ -2166,6 +2243,8 @@ function PlayerStandard:_check_action_steelsight(t, input)
 	return new_action
 end
 
+
+
 function PlayerStandard:_start_action_steelsight(t, gadget_state)
 	if self._equipped_unit and self._equipped_unit:base() then
 		local speed_multiplier = self._equipped_unit:base():exit_run_speed_multiplier() or 1
@@ -2242,6 +2321,17 @@ function PlayerStandard:_start_action_steelsight(t, gadget_state)
 	managers.job:set_memory("cac_4", true)
 end
 
+--Check for being fully ADS'd
+function PlayerStandard:full_steelsight()
+	local weap_base = self._equipped_unit:base()	
+	local weap_hold = weap_base.weapon_hold and weap_base:weapon_hold() or weap_base:get_name_id()
+	local is_bow = table.contains(weap_base:weapon_tweak_data().categories, "bow")
+	local force_ads_recoil_anims = weap_base and weap_base:weapon_tweak_data().always_play_anims
+	if restoration.Options:GetValue("OTHER/NoADSRecoilAnims") and self._shooting and self._state_data.in_steelsight and not weap_base.akimbo and not is_bow and not norecoil_blacklist[weap_hold] and not force_ads_recoil_anims then
+		self._ext_camera:play_redirect(self:get_animation("idle"))
+	end
+	return self._state_data.in_steelsight and self._camera_unit:base():is_stance_done()
+end
 
 --Ends minigun spinup.
 Hooks:PostHook(PlayerStandard, "_end_action_steelsight", "ResMinigunExitSteelsight", function(self, t, gadget_state)
@@ -2250,6 +2340,13 @@ Hooks:PostHook(PlayerStandard, "_end_action_steelsight", "ResMinigunExitSteelsig
 		if weapon:get_name_id() == "m134" or weapon:get_name_id() == "shuno" then
 			weapon:vulcan_exit_steelsight()
 		end
+	end
+	local weap_base = self._equipped_unit:base()	
+	local weap_hold = weap_base.weapon_hold and weap_base:weapon_hold() or weap_base:get_name_id()
+	local is_bow = table.contains(weap_base:weapon_tweak_data().categories, "bow")
+	local force_ads_recoil_anims = weap_base and weap_base:weapon_tweak_data().always_play_anims
+	if restoration.Options:GetValue("OTHER/NoADSRecoilAnims") and self._shooting and not self._state_data.in_steelsight and not weap_base.akimbo and not is_bow and not norecoil_blacklist[weap_hold] and not force_ads_recoil_anims then
+		self._ext_camera:play_redirect(self:get_animation("recoil_enter"))
 	end
 end)
 
@@ -2503,7 +2600,7 @@ function PlayerStandard:_do_melee_damage(t, bayonet_melee, melee_hit_ray, melee_
 			end
 			local defense_data = character_unit:character_damage():damage_melee(action_data)
 			self:_check_melee_dot_damage(col_ray, defense_data, melee_entry)
-			self:_perform_sync_melee_damage(hit_unit, col_ray, action_data.damage)
+			self:_perform_sync_melee_damage(hit_unit, col_ray, action_data.damage, action_data.damage_effect)
 			
 			if tweak_data.blackmarket.melee_weapons[melee_entry].fire_dot_data and character_unit:character_damage().damage_fire then
 				local action_data = {
@@ -2519,7 +2616,7 @@ function PlayerStandard:_do_melee_damage(t, bayonet_melee, melee_hit_ray, melee_
 
 			return defense_data
 		else
-			self:_perform_sync_melee_damage(hit_unit, col_ray, damage)
+			self:_perform_sync_melee_damage(hit_unit, col_ray, damage, damage_effect)
 		end
 	else
 	end
@@ -2531,6 +2628,20 @@ function PlayerStandard:_do_melee_damage(t, bayonet_melee, melee_hit_ray, melee_
 		stack[2] = 0
 	end
 	return col_ray
+end
+
+
+function PlayerStandard:_perform_sync_melee_damage(hit_unit, col_ray, damage, damage_effect)
+	if hit_unit:damage() and col_ray.body:extension() and col_ray.body:extension().damage then
+		damage = math.clamp(damage, PlayerStandard.MINMAX_MELEE_SYNC[1], PlayerStandard.MINMAX_MELEE_SYNC[2])
+		if damage_effect then
+			damage_effect = math.clamp(damage_effect, PlayerStandard.MINMAX_MELEE_SYNC[1], PlayerStandard.MINMAX_MELEE_SYNC[2])
+			col_ray.body:extension().damage:damage_damage(self._unit, col_ray.normal, col_ray.position, col_ray.ray, damage_effect)
+		end
+
+		col_ray.body:extension().damage:damage_melee(self._unit, col_ray.normal, col_ray.position, col_ray.ray, damage)
+		managers.network:session():send_to_peers_synched("sync_body_damage_melee", col_ray.body, self._unit, col_ray.normal, col_ray.position, col_ray.ray, damage, damage_effect)
+	end
 end
 
 --Now also returns steelsight information. Used for referencing spread values to give steelsight bonuses.
@@ -2637,6 +2748,12 @@ function PlayerStandard:_update_reload_timers(t, dt, input)
 			if self._equipped_unit:base().on_reload_stop then
 				self._equipped_unit:base():on_reload_stop()
 			end
+		end
+	end
+	if not self._state_data.reload_expire_t and not self._state_data.reload_exit_expire_t then
+		if self._equipped_unit and self._equipped_unit:base().set_reload_objects_visible and self._equipped_unit:base()._ignore_reload_objects then
+			self._equipped_unit:base():tweak_data_anim_stop("reload")
+			self._equipped_unit:base():set_reload_objects_visible(false)
 		end
 	end
 end

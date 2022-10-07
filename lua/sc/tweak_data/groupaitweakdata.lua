@@ -7749,6 +7749,193 @@ else
 		is_captain = true
 	}	
 	
+	
+	--Sonicmod mutator unit categories
+	
+	self.unit_categories.Sonicmod_Tank_Ben = {
+			unit_types = {
+				america = {
+					Idstring("units/pd2_dlc_gitgud/characters/ene_bulldozer_minigun/ene_bulldozer_minigun")
+				},					
+				russia = {
+					Idstring("units/pd2_mod_reapers/characters/ene_bulldozer_mini/ene_bulldozer_mini")
+				},
+				zombie = {
+					Idstring("units/pd2_dlc_gitgud/characters/ene_bulldozer_minigun/ene_bulldozer_minigun")
+				},
+				murkywater = {
+					Idstring("units/pd2_mod_sharks/characters/ene_murky_fbi_tank_benelli/ene_murky_fbi_tank_benelli")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_bulldozer_minigun/ene_bulldozer_minigun")
+				},						
+				nypd = {
+					Idstring("units/pd2_dlc_gitgud/characters/ene_bulldozer_minigun/ene_bulldozer_minigun")
+				},	
+				lapd = {
+					Idstring("units/pd2_dlc_gitgud/characters/ene_bulldozer_minigun/ene_bulldozer_minigun")
+				},
+				fbi = {
+					Idstring("units/pd2_dlc_gitgud/characters/ene_bulldozer_minigun/ene_bulldozer_minigun")
+				}				
+			},
+			access = access_type_all,
+			special_type = "tank"
+		}
+	
+		self.unit_categories.Sonicmod_Tank_Medic = {
+			unit_types = {
+				america = {
+					Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_medic_sc/ene_bulldozer_medic_sc")
+				},					
+				russia = {
+					Idstring("units/pd2_mod_reapers/characters/ene_bulldozer_medic/ene_bulldozer_medic")
+				},
+				zombie = {
+					Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_medic_sc/ene_bulldozer_medic_sc")
+				},
+				murkywater = {
+					Idstring("units/pd2_mod_sharks/characters/ene_murky_fbi_tank_medic/ene_murky_fbi_tank_medic")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_bulldozer_medic/ene_bulldozer_medic")
+				},						
+				nypd = {
+					Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_medic_sc/ene_bulldozer_medic_sc")
+				},	
+				lapd = {
+					Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_medic_sc/ene_bulldozer_medic_sc")
+				},
+				fbi = {
+					Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_medic_sc/ene_bulldozer_medic_sc")
+				}				
+			},
+			access = access_type_all,
+			special_type = "tank"
+		}
+		
+		self.unit_categories.Sonicmod_Titan_Rifle = {
+			unit_types = {
+				america = {
+					Idstring("units/pd2_dlc_vip/characters/ene_titan_rifle/ene_titan_rifle")
+				},					
+				russia = {
+					Idstring("units/pd2_dlc_mad/characters/ene_titan_rifle/ene_titan_rifle")
+				},
+				zombie = {
+					Idstring("units/pd2_mod_halloween/characters/ene_skele_swat/ene_skele_swat")
+				},
+				murkywater = {
+					Idstring("units/pd2_mod_sharks/characters/ene_titan_rifle/ene_titan_rifle")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_mad/characters/ene_titan_rifle/ene_titan_rifle")
+				},						
+				nypd = {
+					Idstring("units/pd2_dlc_vip/characters/ene_titan_rifle/ene_titan_rifle")
+				},	
+				lapd = {
+					Idstring("units/pd2_dlc_vip/characters/ene_titan_rifle/ene_titan_rifle")
+				},
+				fbi = {
+					Idstring("units/pd2_dlc_vip/characters/ene_titan_rifle/ene_titan_rifle")
+				}				
+			},
+			access = access_type_all
+		}
+		
+		self.unit_categories.Sonicmod_Titan_Shotgun = {
+			unit_types = {
+				america = {
+					Idstring("units/pd2_dlc_vip/characters/ene_titan_shotgun/ene_titan_shotgun")
+				},					
+				russia = {
+					Idstring("units/pd2_dlc_mad/characters/ene_titan_shotgun/ene_titan_shotgun")
+				},
+				zombie = {
+					Idstring("units/pd2_mod_halloween/characters/ene_skele_swat_2/ene_skele_swat_2")
+				},
+				murkywater = {
+					Idstring("units/pd2_mod_sharks/characters/ene_titan_shotgun/ene_titan_shotgun")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_mad/characters/ene_titan_shotgun/ene_titan_shotgun")
+				},						
+				nypd = {
+					Idstring("units/pd2_dlc_vip/characters/ene_titan_shotgun/ene_titan_shotgun")
+				},	
+				lapd = {
+					Idstring("units/pd2_dlc_vip/characters/ene_titan_shotgun/ene_titan_shotgun")
+				},
+				fbi = {
+					Idstring("units/pd2_dlc_vip/characters/ene_titan_shotgun/ene_titan_shotgun")
+				}				
+			},
+			access = access_type_all
+		}
+		
+		self.unit_categories.Sonicmod_Titan_Tazer = {
+			unit_types = {
+				america = {
+					Idstring("units/pd2_dlc_vip/characters/ene_titan_taser/ene_titan_taser")
+				},					
+				russia = {
+					Idstring("units/pd2_dlc_mad/characters/ene_titan_taser/ene_titan_taser")
+				},
+				zombie = {
+					Idstring("units/pd2_mod_halloween/characters/ene_titan_taser/ene_titan_taser")
+				},
+				murkywater = {
+					Idstring("units/pd2_dlc_vip/characters/ene_titan_taser/ene_titan_taser")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_mad/characters/ene_titan_taser/ene_titan_taser")
+				},						
+				nypd = {
+					Idstring("units/pd2_dlc_vip/characters/ene_titan_taser/ene_titan_taser")
+				},	
+				lapd = {
+					Idstring("units/pd2_dlc_vip/characters/ene_titan_taser/ene_titan_taser")
+				},
+				fbi = {
+					Idstring("units/pd2_dlc_vip/characters/ene_titan_taser/ene_titan_taser")
+				}				
+			},
+			access = access_type_all,
+			special_type = "taser"
+		}
+		
+		self.unit_categories.Sonicmod_Titan_Shield = {
+			unit_types = {
+				america = {
+					Idstring("units/pd2_dlc_vip/characters/ene_phalanx_1_assault/ene_phalanx_1_assault")
+				},					
+				russia = {
+					Idstring("units/pd2_dlc_mad/characters/ene_phalanx_1_assault/ene_phalanx_1_assault")
+				},
+				zombie = {
+					Idstring("units/pd2_mod_halloween/characters/ene_phalanx_1_assault/ene_phalanx_1_assault")
+				},
+				murkywater = {
+					Idstring("units/pd2_dlc_vip/characters/ene_phalanx_1_assault/ene_phalanx_1_assault")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_mad/characters/ene_phalanx_1_assault/ene_phalanx_1_assault")
+				},						
+				nypd = {
+					Idstring("units/pd2_dlc_vip/characters/ene_phalanx_1_assault/ene_phalanx_1_assault")
+				},	
+				lapd = {
+					Idstring("units/pd2_dlc_vip/characters/ene_phalanx_1_assault/ene_phalanx_1_assault")
+				},
+				fbi = {
+					Idstring("units/pd2_dlc_vip/characters/ene_phalanx_1_assault/ene_phalanx_1_assault")
+				}				
+			},
+			access = access_type_all,
+			special_type = "shield"
+		}
+	
 	--Skirmish only unit categories
 	
 	--FBI Light SWATs, for earlier waves
@@ -10501,7 +10688,7 @@ else
 		access = access_type_all
 	}	
 	
-	--Zeal Heavies with Bravo Sharpshooters
+	--Zeal Heavies
 	self.unit_categories.SKM_Heavy_SWAT_Shotgun_W7 = {
 		unit_types = {
 			america = {
@@ -10683,64 +10870,32 @@ else
 		access = access_type_all
 	}	
 	
-	--Zeal Heavies with only Bravo Sharpshooters
+	--Zeal Heavies
 	self.unit_categories.SKM_Heavy_SWAT_Shotgun_W8 = {
 		unit_types = {
 			america = {
-				Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc"),
-				Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc"),
-				Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc"),
-				Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc"),
-				Idstring("units/pd2_mod_bravo/characters/ene_bravo_dmr/ene_bravo_dmr")				
+				Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc")				
 			},
 			russia = {
-				Idstring("units/pd2_mod_reapers/characters/ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870"),
-				Idstring("units/pd2_mod_reapers/characters/ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870"),
-				Idstring("units/pd2_mod_reapers/characters/ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870"),
-				Idstring("units/pd2_mod_reapers/characters/ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870"),
-				Idstring("units/pd2_mod_bravo/characters/ene_bravo_dmr_ru/ene_bravo_dmr_ru")				
+				Idstring("units/pd2_mod_reapers/characters/ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870")				
 			},
 			zombie = {
-				Idstring("units/pd2_mod_halloween/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc"),
-				Idstring("units/pd2_mod_halloween/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc"),
-				Idstring("units/pd2_mod_halloween/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc"),
-				Idstring("units/pd2_mod_halloween/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc"),
-				Idstring("units/pd2_mod_bravo/characters/ene_bravo_dmr/ene_bravo_dmr")					
+				Idstring("units/pd2_mod_halloween/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc")				
 			},							
 			murkywater = {
-				Idstring("units/pd2_mod_sharks/characters/ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870"),
-				Idstring("units/pd2_mod_sharks/characters/ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870"),
-				Idstring("units/pd2_mod_sharks/characters/ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870"),
-				Idstring("units/pd2_mod_sharks/characters/ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870"),
-				Idstring("units/pd2_mod_bravo/characters/ene_bravo_dmr_murky/ene_bravo_dmr_murky")						
+				Idstring("units/pd2_mod_sharks/characters/ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870")						
 			},
 			federales = {
-				Idstring("units/pd2_dlc_bex/characters/ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870"),
-				Idstring("units/pd2_dlc_bex/characters/ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870"),
-				Idstring("units/pd2_dlc_bex/characters/ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870"),
-				Idstring("units/pd2_dlc_bex/characters/ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870"),
-				Idstring("units/pd2_mod_bravo/characters/ene_bravo_dmr_mex/ene_bravo_dmr_mex")				
+				Idstring("units/pd2_dlc_bex/characters/ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870")				
 			},						
 			nypd = {
-				Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc"),
-				Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc"),
-				Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc"),
-				Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc"),
-				Idstring("units/pd2_mod_bravo/characters/ene_bravo_dmr/ene_bravo_dmr")	
+				Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc")	
 			},	
 			lapd = {	
-				Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc"),
-				Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc"),
-				Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc"),
-				Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc"),
-				Idstring("units/pd2_mod_bravo/characters/ene_bravo_dmr/ene_bravo_dmr")	
+				Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc")	
 			},
 			fbi = {
-				Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc"),
-				Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc"),
-				Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc"),
-				Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc"),
-				Idstring("units/pd2_mod_bravo/characters/ene_bravo_dmr/ene_bravo_dmr")				
+				Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870_sc/ene_zeal_swat_heavy_r870_sc")				
 			}		
 		},
 		access = access_type_all
@@ -13167,7 +13322,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 					unit = "FBI_tank",
 					freq = 1,
 					amount_min = 1,
-					amount_max = 2,
+					amount_max = 1,
 					tactics = self._tactics.GREEN_tank_DW,
 					rank = 3
 				},
@@ -13277,7 +13432,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 					unit = "BLACK_tank",
 					freq = 1,
 					amount_min = 1,
-					amount_max = 2,
+					amount_max = 1,
 					tactics = self._tactics.BLACK_tank_DW,
 					rank = 3
 				},
@@ -13390,7 +13545,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 					unit = "SKULL_tank",
 					freq = 1,
 					amount_min = 1,
-					amount_max = 2,
+					amount_max = 1,
 					tactics = self._tactics.SKULL_tank,
 					rank = 3
 				},
@@ -13497,7 +13652,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 					unit = "TIT_tank",
 					freq = 1,
 					amount_min = 1,
-					amount_max = 2,
+					amount_max = 1,
 					tactics = self._tactics.TIT_tank,
 					rank = 3
 				},
@@ -14491,49 +14646,19 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 			}
 		}
 	}
-	if difficulty_index <= 6 then
-		self.enemy_spawn_groups.FBI_spoocs = {
-			amount = {1, 1},
-			spawn = {
-				{
-					unit = "spooc",
-					freq = 1,
-					amount_min = 1,
-					amount_max = 1,
-					tactics = self._tactics.spooc,
-					rank = 1
-				}
+	self.enemy_spawn_groups.FBI_spoocs = {
+		amount = {1, 1},
+		spawn = {
+			{
+				unit = "spooc",
+				freq = 1,
+				amount_min = 1,
+				amount_max = 1,
+				tactics = self._tactics.spooc,
+				rank = 1
 			}
 		}
-	elseif difficulty_index == 7 then
-		self.enemy_spawn_groups.FBI_spoocs = {
-			amount = {2, 2},
-			spawn = {
-				{
-					unit = "spooc",
-					freq = 1,
-					amount_min = 2,
-					amount_max = 2,
-					tactics = self._tactics.spooc,
-					rank = 1
-				}
-			}
-		}		
-	else
-		self.enemy_spawn_groups.FBI_spoocs = {
-			amount = {3, 3},
-			spawn = {
-				{
-					unit = "spooc",
-					freq = 1,
-					amount_min = 3,
-					amount_max = 3,
-					tactics = self._tactics.spooc,
-					rank = 1
-				}
-			}
-		}	
-	end
+	}
 	
 	--Titan Snipers/US Marshal squads
 	--These guys shouldn't exist on lower difficulties
@@ -15594,7 +15719,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 		}
 	}	
 	self.enemy_spawn_groups.SKM_FBI_spoocs_W5 = {
-		amount = {2, 2},
+		amount = {1, 1},
 		spawn = {
 			{
 				unit = "SKM_spooc_w5",
@@ -15864,7 +15989,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 				unit = "SKM_BLACK_tank_W5",
 				freq = 1,
 				amount_min = 1,
-				amount_max = 2,
+				amount_max = 1,
 				tactics = self._tactics.BLACK_tank_DW,
 				rank = 3
 			},
@@ -15897,7 +16022,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 				unit = "SKM_GREEN_tank_W5",
 				freq = 1,
 				amount_min = 1,
-				amount_max = 2,
+				amount_max = 1,
 				tactics = self._tactics.GREEN_tank_DW,
 				rank = 3
 			},
@@ -15930,7 +16055,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 				unit = "SKM_SKULL_tank_W5",
 				freq = 1,
 				amount_min = 1,
-				amount_max = 2,
+				amount_max = 1,
 				tactics = self._tactics.SKULL_tank,
 				rank = 3
 			},
@@ -15964,7 +16089,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 				unit = "TIT_tank",
 				freq = 1,
 				amount_min = 1,
-				amount_max = 2,
+				amount_max = 1,
 				tactics = self._tactics.TIT_tank,
 				rank = 3
 			},
@@ -15985,7 +16110,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 		}
 	}	
 	self.enemy_spawn_groups.SKM_FBI_spoocs_W6 = {
-		amount = {2, 2},
+		amount = {1, 1},
 		spawn = {
 			{
 				unit = "SKM_spooc_w5",
@@ -16254,7 +16379,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 				unit = "SKM_BLACK_tank_W5",
 				freq = 1,
 				amount_min = 1,
-				amount_max = 2,
+				amount_max = 1,
 				tactics = self._tactics.BLACK_tank_DW,
 				rank = 3
 			},
@@ -16287,7 +16412,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 				unit = "SKM_GREEN_TANK_W7",
 				freq = 1,
 				amount_min = 1,
-				amount_max = 2,
+				amount_max = 1,
 				tactics = self._tactics.GREEN_tank_DW,
 				rank = 3
 			},
@@ -16320,7 +16445,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 				unit = "SKM_SKULL_tank_W5",
 				freq = 1,
 				amount_min = 1,
-				amount_max = 2,
+				amount_max = 1,
 				tactics = self._tactics.SKULL_tank,
 				rank = 3
 			},
@@ -16354,7 +16479,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 				unit = "TIT_tank",
 				freq = 1,
 				amount_min = 1,
-				amount_max = 2,
+				amount_max = 1,
 				tactics = self._tactics.TIT_tank,
 				rank = 3
 			},
@@ -16375,7 +16500,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 		}
 	}	
 	self.enemy_spawn_groups.SKM_FBI_spoocs_W7 = {
-		amount = {3, 3},
+		amount = {1, 1},
 		spawn = {
 			{
 				unit = "SKM_spooc_w5",
@@ -16646,7 +16771,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 				unit = "SKM_BLACK_tank_W5",
 				freq = 1,
 				amount_min = 1,
-				amount_max = 2,
+				amount_max = 1,
 				tactics = self._tactics.BLACK_tank_DW,
 				rank = 3
 			},
@@ -16679,7 +16804,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 				unit = "SKM_GREEN_TANK_W8",
 				freq = 1,
 				amount_min = 1,
-				amount_max = 2,
+				amount_max = 1,
 				tactics = self._tactics.GREEN_tank_DW,
 				rank = 3
 			},
@@ -16712,7 +16837,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 				unit = "SKM_SKULL_tank_W5",
 				freq = 1,
 				amount_min = 1,
-				amount_max = 2,
+				amount_max = 1,
 				tactics = self._tactics.SKULL_tank,
 				rank = 3
 			},
@@ -16746,7 +16871,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 				unit = "TIT_tank",
 				freq = 1,
 				amount_min = 1,
-				amount_max = 2,
+				amount_max = 1,
 				tactics = self._tactics.TIT_tank,
 				rank = 3
 			},
@@ -16767,7 +16892,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 		}
 	}	
 	self.enemy_spawn_groups.SKM_FBI_spoocs_W8 = {
-		amount = {3, 3},
+		amount = {1, 1},
 		spawn = {
 			{
 				unit = "SKM_spooc_w5",
@@ -17036,7 +17161,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 				unit = "SKM_BLACK_tank_W5",
 				freq = 1,
 				amount_min = 1,
-				amount_max = 2,
+				amount_max = 1,
 				tactics = self._tactics.BLACK_tank_DW,
 				rank = 3
 			},
@@ -17069,7 +17194,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 				unit = "SKM_GREEN_TANK_W8",
 				freq = 1,
 				amount_min = 1,
-				amount_max = 2,
+				amount_max = 1,
 				tactics = self._tactics.GREEN_tank_DW,
 				rank = 3
 			},
@@ -17102,7 +17227,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 				unit = "SKM_SKULL_tank_W5",
 				freq = 1,
 				amount_min = 1,
-				amount_max = 2,
+				amount_max = 1,
 				tactics = self._tactics.SKULL_tank,
 				rank = 3
 			},
@@ -17136,7 +17261,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 				unit = "TIT_tank",
 				freq = 1,
 				amount_min = 1,
-				amount_max = 2,
+				amount_max = 1,
 				tactics = self._tactics.TIT_tank,
 				rank = 3
 			},
@@ -17157,7 +17282,7 @@ function GroupAITweakData:_init_enemy_spawn_groups(difficulty_index)
 		}
 	}	
 	self.enemy_spawn_groups.SKM_FBI_spoocs_W9 = {
-		amount = {3, 3},
+		amount = {1, 1},
 		spawn = {
 			{
 				unit = "SKM_spooc_w5",
@@ -17575,6 +17700,11 @@ function GroupAITweakData:_init_task_data(difficulty_index, difficulty)
 	if job == "chew" then
 		map_scale_factor = 0.25
 	end
+	
+	--Reduced spawns if playing in Solo offline
+	if Global and Global.game_settings and Global.game_settings.single_player then
+		map_scale_factor = map_scale_factor * 0.75
+	end	
 
 	self.besiege.assault.force_balance_mul = {
 		0.55 * map_scale_factor,
@@ -17624,7 +17754,179 @@ function GroupAITweakData:_init_task_data(difficulty_index, difficulty)
 		3.4 * map_scale_factor,
 		3.55 * map_scale_factor
 	}
-
+	
+	if restoration and restoration.sonic_mod then 
+	if difficulty_index <= 2 then
+		self.besiege.assault.force = {
+			14,
+			16,
+			18
+		}
+		self.besiege.assault.force_pool = {
+			50,
+			75,
+			100
+		}
+		self.special_unit_spawn_limits = {
+			tank = 1,
+			taser = 1,
+			boom = 0,
+			spooc = 0,
+			shield = math.max(math.round(2 * map_scale_factor), 1),
+			medic = 0,
+			phalanx_vip = 0,
+			spring = 0,
+			headless_hatman = 0,
+			autumn = 0,
+			summers = 0
+		}
+	elseif difficulty_index == 3 then
+		self.besiege.assault.force = {
+			14,
+			16,
+			18
+		}
+		self.besiege.assault.force_pool = {
+			50,
+			75,
+			100
+		}
+		self.special_unit_spawn_limits = {
+			tank = 1,
+			taser = math.max(math.round(2 * map_scale_factor), 1),
+			boom = 0,
+			spooc = 1,
+			shield = math.max(math.round(3 * map_scale_factor), 1),
+			medic = 0,
+			phalanx_vip = 1,
+			spring = 1,
+			headless_hatman = 1,
+			autumn = 1,
+			summers = 1
+		}
+	elseif difficulty_index == 4 then
+		self.besiege.assault.force = {
+			15,
+			18,
+			21
+		}
+		self.besiege.assault.force_pool = {
+			75,
+			100,
+			125
+		}
+		self.special_unit_spawn_limits = {
+			tank = math.max(math.round(2 * map_scale_factor), 1),
+			taser = math.max(math.round(3 * map_scale_factor), 1),
+			boom = 0,
+			spooc = math.max(math.round(2 * map_scale_factor), 1),
+			shield = math.max(math.round(3 * map_scale_factor), 1),
+			medic = math.max(math.round(3 * map_scale_factor), 1),
+			phalanx_vip = 1,
+			spring = 1,
+			headless_hatman = 1,
+			autumn = 1,
+			summers = 1
+		}
+	elseif difficulty_index == 5 then
+		self.besiege.assault.force = {
+			21,
+			23,
+			26
+		}
+		self.besiege.assault.force_pool = {
+			75,
+			100,
+			125
+		}
+		self.special_unit_spawn_limits = {
+			tank = math.max(math.round(3 * map_scale_factor), 1),
+			taser = math.max(math.round(4 * map_scale_factor), 1),
+			boom = math.max(math.round(0 * map_scale_factor), 1),
+			spooc = math.max(math.round(2 * map_scale_factor), 1),
+			shield = math.max(math.round(3 * map_scale_factor), 1),
+			medic = math.max(math.round(3 * map_scale_factor), 1),
+			phalanx_vip = 1,
+			spring = 1,
+			headless_hatman = 1,
+			autumn = 1,
+			summers = 1
+		}
+	elseif difficulty_index == 6 then
+		self.besiege.assault.force = {
+			28,
+			30,
+			33
+		}
+		self.besiege.assault.force_pool = {
+			250,
+			350,
+			450
+		}
+		self.special_unit_spawn_limits = {
+			tank = math.max(math.round(3 * map_scale_factor), 1),
+			taser = math.max(math.round(4 * map_scale_factor), 1),
+			boom = math.max(math.round(2 * map_scale_factor), 1),
+			spooc = math.max(math.round(3 * map_scale_factor), 1),
+			shield = math.max(math.round(4 * map_scale_factor), 1),
+			medic = math.max(math.round(4 * map_scale_factor), 1),
+			phalanx_vip = 1,
+			spring = 1,
+			headless_hatman = 1,
+			autumn = 1,
+			summers = 1
+		}
+	elseif difficulty_index == 7 then
+		self.besiege.assault.force = {
+			32,
+			33,
+			34
+		}
+		self.besiege.assault.force_pool = {
+			250,
+			350,
+			450
+		}
+		self.special_unit_spawn_limits = {
+			tank = math.max(math.round(3 * map_scale_factor), 1),
+			taser = math.max(math.round(4 * map_scale_factor), 1),
+			boom = math.max(math.round(2 * map_scale_factor), 1),
+			spooc = math.max(math.round(4 * map_scale_factor), 1),
+			shield = math.max(math.round(4 * map_scale_factor), 1),
+			medic = math.max(math.round(4 * map_scale_factor), 1),
+			phalanx_vip = 1,
+			spring = 1,
+			headless_hatman = 1,
+			autumn = 1,
+			summers = 1
+		}
+	else
+	--massive pain
+		self.besiege.assault.force = {
+			40,
+			40,
+			45
+		}
+		self.besiege.assault.force_pool = {
+			750,
+			750,
+			750
+		}
+		self.special_unit_spawn_limits = {
+			tank = math.max(math.round(5 * map_scale_factor), 1),
+			taser = math.max(math.round(6 * map_scale_factor), 1),
+			boom = math.max(math.round(4 * map_scale_factor), 1),
+			spooc = math.max(math.round(5 * map_scale_factor), 1),
+			shield = math.max(math.round(6 * map_scale_factor), 1),
+			medic = math.max(math.round(5 * map_scale_factor), 1),
+			phalanx_vip = 1,
+			spring = 1,
+			headless_hatman = 1,
+			autumn = 1,
+			summers = 1
+		}
+	end
+else	
 	if difficulty_index <= 2 then
 		self.besiege.assault.force = {
 			11,
@@ -17794,6 +18096,7 @@ function GroupAITweakData:_init_task_data(difficulty_index, difficulty)
 			summers = 1
 		}
 	end
+end
 	
 	--Assault groups
 	if difficulty_index <= 2 then
@@ -18508,7 +18811,8 @@ function GroupAITweakData:_init_task_data(difficulty_index, difficulty)
 
 	local captain_cooldown = 2700
 	local captain_min_diff = 0.5
-	local dozer_cooldown = 45
+	local dozer_cooldown = 90
+	local dozer_sonicmodcooldown = 60
 	
 	local tsniperhobelow5_cooldown = 45
 	local tsniperhoabove5_cooldown = 30

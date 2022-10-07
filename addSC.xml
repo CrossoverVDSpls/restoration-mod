@@ -101,8 +101,12 @@
 	
 	<mission			path="levels/instances/unique/red/red_camera_room/world/world" force="true" /> <!--camera guard in front has a shotgun-->
 	
+	<cover_data			path="levels/narratives/elephant/mad/cover_data" force="true" unload="true"/>
+	<nav_data			path="levels/narratives/elephant/mad/nav_manager_data" force="true" unload="true"/>
 	<mission			path="levels/narratives/elephant/mad/world/world" force="true" unload="true"/>
 	<continent			path="levels/narratives/elephant/mad/world/world" force="true" unload="true"/>
+	<continent			path="levels/narratives/elephant/mad/art2/art2" force="true" unload="true"/>
+	<continent			path="levels/narratives/elephant/mad/collision/collision" force="true" unload="true"/>
 	
 	<mission			path="levels/narratives/elephant/born/world/world" force="true" unload="true"/> <!--adds a bikerdozer to the bunker, removes swat turret.-->	
 	<continent			path="levels/narratives/elephant/born/world/world" force="true" unload="true"/> <!--fixes cars clipping into ground-->
@@ -115,18 +119,33 @@
 	
 	<mission			path="levels/narratives/bain/revenge/world/world" force="true" unload="true"/>
 	
+	<mission			path="levels/narratives/classics/glace/world/world" force="true" unload="true"/> <!--restores the unused dozer rappel man that is supposed to spawn during the scaffolding defend section on mayhem and above-->
+																										 <!--actually that was cloaker but I replaced him with dozer as a PDTH's OVK 145+ throwback-->
+	
+	<mission			path="levels/narratives/bain/rvd/stage2/world/world" force="true" unload="true"/> <!--changes up the scripted dozers at the start of the heist--> 
+	
 	<mission			path="levels/narratives/vlad/pines/world/world" force="true" unload="true"/> <!--disables the police sirens-->	
 	<continent			path="levels/narratives/vlad/pines/world/world" force="true" unload="true"/> <!--removes the police lights-->
 	
 	<!--better SWAT squads-->
 	<mission			path="levels/instances/unique/sand/sand_spawn_enemies/world/world" force="true"/>
 	<mission			path="levels/instances/unique/sand/sand_helicopter_spawn_enemies/world/world" force="true"/>
+	<mission			path="levels/instances/unique/glace/glace_helicopter_dozer/world/world" force="true"/>
+	<mission			path="levels/instances/unique/glace/glace_helicopter_swat/world/world" force="true"/>
+	<mission			path="levels/instances/unique/pet_helicopter_swat/world/world" force="true"/>
+	<mission			path="levels/instances/unique/san_helicopter_4swat/world/world" force="true"/>
 	
-	<mission			path="levels/narratives/h_watchdogs/stage_2/world/world" force="true" unload="true"/> <!--Massive FBI Ready Team Response at the start, fixed and moved some cop spawns and restores the unused boat driver-->
+	<mission			path="levels/narratives/h_watchdogs/stage_2/world/world" force="true" unload="true"/> <!--Massive FBI Ready Team Response at the start, fixed and moved some cop spawns-->
 	
 	<mission			path="levels/narratives/e_welcome_to_the_jungle/stage_1/world/world" force="true" unload="true"/> <!--Adds female bikers, biker response and biker guard as the camera man-->
 	
+	<mission			path="levels/narratives/locke/bph/world/world" force="true" unload="true"/> <!--Delayed the spawns and replaced scripted spawns with better Murkies-->
+	
+	<mission			path="levels/narratives/vlad/mallcrasher/mission_turf_war/mission_turf_war" force="true" unload="true"/> <!--fixed one of the scripted cops not moving at all-->
+	
 	<mission			path="levels/narratives/jiu/chas/world/world" force="true" unload="true"/> <!--Adds Kung Fu Masters, more beat cops responding and possible captain encounter on Mayhem and above-->
+	
+	<mission			path="levels/narratives/mcshay/ranc/world/world" force="true" unload="true"/> <!--fixed the beat cops-->
 	
 	<mission			path="levels/instances/shared/obj_skm/world/world" force="true" unload="true"/> <!-- disables custody failure and wave modifier dialogue.-->
 	
@@ -139,7 +158,9 @@
 	
 	<cover_data			path="levels/narratives/h_firestarter/stage_3/cover_data" force="true" unload="true"/>
 	<nav_data			path="levels/narratives/h_firestarter/stage_3/nav_manager_data" force="true" unload="true"/>
+	<mission			path="levels/narratives/h_firestarter/stage_3/world/world" force="true" unload="true"/>
 
+	<mission			path="levels/narratives/locke/brb/world/world" force="true" unload="true"/> <!--disabled most of the bridge spawns (all of nearby van escape)-->
 	<continent			path="levels/narratives/locke/brb/art/art" force="true" unload="true"/><!--optimization-->	
 	<continent			path="levels/narratives/locke/brb/world/world" force="true" unload="true"/><!--optimization-->	
 	<continent			path="levels/narratives/locke/brb/props/props" force="true" unload="true"/><!--optimization, money cassettes spawn-->
@@ -181,6 +202,14 @@
 	<mission			path="levels/instances/unique/pent/pent_security_room/world/world" force="true" unload="true"/>
 	<mission			path="levels/instances/unique/pent/pent_security_room_altdoor/world/world" force="true" unload="true"/>
 
+	<!--Brooklyn 2/10-->
+	<cover_data			path="levels/narratives/continental/spa/cover_data" force="true" unload="true"/>
+	<nav_data			path="levels/narratives/continental/spa/nav_manager_data" force="true" unload="true"/>
+	<continent			path="levels/narratives/continental/spa/world/world" force="true" unload="true"/>
+	<mission			path="levels/narratives/continental/spa/world/world" force="true" unload="true"/>
+	<continent			path="levels/narratives/continental/spa/regin_art/regin_art" force="true" unload="true"/>
+	<mission			path="levels/narratives/continental/spa/regin_art/regin_art" force="true" unload="true"/>
+	
 	<!--First World Bank-->
 	<mission			path="levels/narratives/classics/red2/world/world" force="true" unload="true"/>
 	<continent			path="levels/narratives/classics/red2/world/world" force="true" unload="true"/> 
@@ -1196,6 +1225,55 @@
 	<texture			path="guis/textures/pd2/blackmarket/icons/mods/wpn_fps_smg_mp5_m_drum"/>
 	<!--I am not a texture artist, anyone else is welcome to make a better one -DMC-->
 	<texture			path="units/payday2/weapons/wpn_fps_smg_mp5_pts/wpn_fps_smg_mp5_m_drum_df_cc" force="true"/>
+
+	<!--
+		Weapon Reticles
+		001 - EOTech
+		002 - EOTech w/ 2nd MOA dot
+		003 - EOTech segmented
+		004 - EBR CQB
+		005 - Chevron
+		006 - NcStar Cross
+		007 - Lua logo
+		008 - Small Dot
+		009 - Tiny Dot
+	-->
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_001_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_001_blue_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_001_green_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_001_yellow_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_002_il" force="true" load="true"/> 
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_002_blue_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_002_green_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_002_yellow_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_003_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_003_blue_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_003_green_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_003_yellow_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_004_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_004_blue_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_004_green_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_004_yellow_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_005_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_005_blue_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_005_green_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_005_yellow_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_006_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_006_blue_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_006_green_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_006_yellow_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_007_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_007_blue_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_007_green_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_007_yellow_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_008_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_008_blue_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_008_green_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_008_yellow_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_009_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_009_blue_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_009_green_il" force="true" load="true"/>
+	<texture			path="_dmc/wpn_effects_textures/wpn_sight_reticle_009_yellow_il" force="true" load="true"/>
 	
 	<!--Gold AK shit-->
 	<!--KILL ME -DMC-->

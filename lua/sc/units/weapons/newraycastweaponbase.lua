@@ -1,3 +1,8 @@
+local ids_single = Idstring("single")
+local ids_auto = Idstring("auto")
+local ids_burst = Idstring("burst")
+local ids_volley = Idstring("volley")
+
 --Adds ability to define per weapon category AP skills.
 Hooks:PostHook(NewRaycastWeaponBase, "init", "ResExtraSkills", function(self)
 	--Since armor piercing chance is no longer used, lets use weapon category to determine armor piercing baseline.
@@ -66,7 +71,9 @@ else
 			user_unit:movement():current_state():send_reload_interupt()
 		end
 
-		self:set_reload_objects_visible(false)
+		if not self._ignore_reload_objects then
+			self:set_reload_objects_visible(false)
+		end
 
 		self._reload_objects = {}
 	end
@@ -133,6 +140,11 @@ else
 			else
 				self._next_shell_reloded_t = self._next_shell_reloded_t + self:reload_shell_expire_t(not self._started_reload_empty) / speed_multiplier
 				ammo_to_reload = shotgun_reload_tweak and shotgun_reload_tweak.reload_num or 1
+			end
+			
+			if ammo_to_reload > 1 then
+				ammo_to_reload = math.min(ammo_to_reload, self:get_ammo_max_per_clip() - self:get_ammo_remaining_in_clip())
+				ammo_to_reload = math.min(ammo_to_reload, self:get_ammo_total() - self:get_ammo_remaining_in_clip())
 			end
 
 			if not self._started_reload_empty and self:weapon_tweak_data().tactical_reload then
@@ -442,6 +454,7 @@ function NewRaycastWeaponBase:_update_stats_values(disallow_replenish, ammo_data
 	self._ads_speed_mult = self._ads_speed_mult or  1
 	self._flame_max_range = self:weapon_tweak_data().flame_max_range or nil
 	self._autograph_multiplier = self:weapon_tweak_data().autograph_multiplier or nil
+	self._ignore_reload_objects = self:weapon_tweak_data().ignore_reload_objects or nil
 	
 	self._deploy_anim_override = self:weapon_tweak_data().deploy_anim_override or nil
 	self._deploy_ads_stance_mod = self:weapon_tweak_data().deploy_ads_stance_mod or {translation = Vector3(0, 0, 0), rotation = Rotation(0, 0, 0)}		
@@ -504,7 +517,7 @@ function NewRaycastWeaponBase:_update_stats_values(disallow_replenish, ammo_data
 
 		if not self:is_npc() then
 			self._sms = self:weapon_tweak_data().sms
-			self._smt = self._sms and self:weapon_tweak_data().fire_mode_data and self:weapon_tweak_data().fire_mode_data.fire_rate * 2
+			self._smt = self._sms and self:weapon_tweak_data().fire_mode_data and self:weapon_tweak_data().fire_mode_data.fire_rate * 4
 		end
 
 		for part_id, stats in pairs(custom_stats) do
@@ -644,8 +657,8 @@ function NewRaycastWeaponBase:_update_stats_values(disallow_replenish, ammo_data
 				self._can_shoot_through_shield = true
 				self:weapon_tweak_data().can_shoot_through_shield = true
 			end
-			if stats.armor_piercing_add then
-				self:weapon_tweak_data().armor_piercing_chance = 1
+			if stats.armor_piercing_override then
+				self:weapon_tweak_data().armor_piercing_chance = stats.armor_piercing_override
 			end
 			if stats.rof_mult then
 				self._rof_mult = self._rof_mult * stats.rof_mult
@@ -688,7 +701,9 @@ function NewRaycastWeaponBase:_update_stats_values(disallow_replenish, ammo_data
 				self._has_big_scope = true
 			end
 			if stats.sks_clip then
-				self:weapon_tweak_data().timers.reload_exit_not_empty = 1.2
+				if self:weapon_tweak_data().timers then
+					self:weapon_tweak_data().timers.reload_exit_not_empty = 1.2
+				end
 				self:weapon_tweak_data().tactical_reload = nil
 				self:ammo_base():weapon_tweak_data().tactical_reload = nil
 			end
@@ -700,7 +715,7 @@ function NewRaycastWeaponBase:_update_stats_values(disallow_replenish, ammo_data
 					else
 						self._sms = self._sms + (1 * (stats.sms - 1))
 					end
-					self._smt = self:weapon_tweak_data().fire_mode_data and self:weapon_tweak_data().fire_mode_data.fire_rate * 2
+					self._smt = self:weapon_tweak_data().fire_mode_data and self:weapon_tweak_data().fire_mode_data.fire_rate * 4
 				end
 			end
 		end
@@ -750,6 +765,15 @@ function NewRaycastWeaponBase:_update_stats_values(disallow_replenish, ammo_data
 	self:precalculate_ammo_pickup()
 end
 
+function NewRaycastWeaponBase:armor_piercing_chance()
+	if self._fire_mode == ids_volley then
+		local fire_mode_data = self:weapon_tweak_data().fire_mode_data
+		local volley_fire_mode = fire_mode_data and fire_mode_data.volley
+		return volley_fire_mode and volley_fire_mode.armor_piercing_chance or 0
+	else
+		return self._armor_piercing_chance or 0
+	end
+end
 
 function NewRaycastWeaponBase:should_reload_immediately()
 	return self:weapon_tweak_data().should_reload_immediately
@@ -1244,7 +1268,9 @@ function NewRaycastWeaponBase:set_scope_range_distance(distance)
 		for i, part_id in ipairs(self._scopes) do
 			part = self._parts[part_id]   
 
-			if part and part.unit:digital_gui() then
+			local digital_gui = part and part.unit:digital_gui()
+
+			if digital_gui and digital_gui.number_set then
 				part.unit:digital_gui():number_set(distance and math.round(distance) or false, false)
 				if distance then
 					if (distance * 100) < falloff_start then
@@ -1259,7 +1285,9 @@ function NewRaycastWeaponBase:set_scope_range_distance(distance)
 				end
 			end
 
-			if part and part.unit:digital_gui_upper() then
+			local digital_gui_upper = part and part.unit:digital_gui_upper()
+
+			if digital_gui_upper and digital_gui_upper.number_set then
 				part.unit:digital_gui_upper():number_set(distance and math.round(distance) or false, false)
 				if distance then
 					if (distance * 100) < falloff_start then
@@ -1340,5 +1368,17 @@ function NewRaycastWeaponBase:_update_bullet_objects(ammo_func)
 				end
 			end
 		end
+	end
+end
+
+function NewRaycastWeaponBase:get_object_damage_mult()
+	if self._fire_mode == ids_volley then
+		local fire_mode_data = self:weapon_tweak_data().fire_mode_data
+		local volley_fire_mode = fire_mode_data and fire_mode_data.volley
+		return volley_fire_mode and volley_fire_mode.object_damage_mult or 0.75
+	elseif self._rays and self._rays == 1 and self:weapon_tweak_data().object_damage_mult_single_ray then
+		return self:weapon_tweak_data().object_damage_mult_single_ray
+	else
+		return self:weapon_tweak_data().object_damage_mult or 1
 	end
 end

@@ -178,6 +178,23 @@ local grenadier_smash = {
 	ids_func("units/pd2_mod_sharks/characters/ene_grenadier_1/ene_grenadier_1_husk")    	
 }
 
+local armour = {
+	-- Tans
+	[Idstring("body_plate"):key()] = true,
+	-- Dozer
+	[Idstring("body_helmet"):key()] = true,
+	[Idstring("body_helmet_plate"):key()] = true,
+	[Idstring("body_helmet_glass"):key()] = true,
+	[Idstring("body_armor_chest"):key()] = true,
+	[Idstring("body_armor_stomache"):key()] = true,
+	[Idstring("body_armor_back"):key()] = true,
+	[Idstring("body_armor_throat"):key()] = true,
+	[Idstring("body_armor_neck"):key()] = true,
+	-- Sosa
+	[Idstring("body_vest"):key()] = true,
+	[Idstring("body_ammo"):key()] = true,
+}
+
 Hooks:PostHook(CopDamage, "init", "res_init", function(self, unit)
 	self._player_damage_ratio = 0 --Damage dealt to this enemy by players that contributed to the kill.
 
@@ -618,6 +635,7 @@ function CopDamage:sync_damage_fire(attacker_unit, damage_percent, start_dot_dan
 
 	if not weapon_unit and weapon_id ~= "molotov" then
 		weapon_unit = attacker_unit and attacker_unit:inventory() and alive(attacker_unit:inventory():equipped_unit()) and attacker_unit:inventory():equipped_unit()
+		attack_data.is_fire_pool_damage = true
 	end
 
 	local hit_pos = mvector3.copy(self._unit:position())
@@ -791,8 +809,11 @@ function CopDamage:damage_bullet(attack_data)
 
 	local is_civilian = CopDamage.is_civilian(self._unit:base()._tweak_table)
 	local damage = attack_data.damage
-
-	if self._has_plate and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_plate_name then
+	
+	local ignore = self._unit:base()._tweak_table == "spring" or self._unit:base()._tweak_table == "tank_titan"	or self._unit:base()._tweak_table == "headless_hatman" or self._unit:base()._tweak_table == "tank_titan_assault"	
+	
+	local hit_body = attack_data.col_ray.body
+	if armour[hit_body:name():key()] and not ignore then -- dozer armour negates damage
 		local pierce_armor = nil
 		
 		--Just as a fallback, ugly as sin but whatever
@@ -814,6 +835,10 @@ function CopDamage:damage_bullet(attack_data)
 				normal = attack_data.col_ray.ray
 			})
 		else
+			if attack_data.attacker_unit == managers.player:player_unit() and hit_body:extension() and hit_body:extension().damage then
+				managers.hud:on_hit_confirmed() -- no damage to the unit, but it did damage the body
+			end
+
 			World:effect_manager():spawn({
 				effect = Idstring("effects/payday2/particles/impacts/steel_no_decal_impact_pd2"),
 				position = attack_data.col_ray.position,
@@ -1593,9 +1618,16 @@ function CopDamage:damage_melee(attack_data)
 	attack_data.result = result
 	attack_data.pos = attack_data.col_ray.position
 
+	local dismember_victim = false
 	local snatch_pager, from_behind = nil
 
 	if result.type == "death" then
+		if self:_dismember_condition(attack_data) then
+			self:_dismember_body_part(attack_data)
+
+			dismember_victim = true
+		end
+
 		local data = {
 			name = self._unit:base()._tweak_table,
 			stats_name = self._unit:base()._stats_name,
@@ -2849,7 +2881,13 @@ function CopDamage:damage_dot(attack_data)
 				managers.money:civilian_killed()
 			end
 
-			self:_check_damage_achievements(attack_data, false)
+			if attack_data and attack_data.weapon_id and not attack_data.weapon_unit then
+				attack_data.name_id = attack_data.weapon_id
+
+				self:_check_melee_achievements(attack_data)
+			else
+				self:_check_damage_achievements(attack_data, false)
+			end
 		end
 	end
 
@@ -2875,6 +2913,12 @@ function CopDamage:damage_dot(attack_data)
 
 	self:_send_dot_attack_result(attack_data, attacker, damage_percent, sync_attack_variant)
 	self:_on_damage_received(attack_data)
+
+	result.attack_data = attack_data
+	result.damage_percent = damage_percent
+	result.damage = damage
+	
+	return result
 end
 
 function CopDamage:sync_damage_dot(attacker_unit, damage_percent, death, variant, hurt_animation, weapon_id)

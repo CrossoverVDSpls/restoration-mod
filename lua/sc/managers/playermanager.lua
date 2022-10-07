@@ -261,9 +261,10 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 		end
 	end
 
-
+	local killshot_cooldown_reduction = (variant and variant == "melee" and tweak_data.upgrades.on_killshot_cooldown_reduction_melee) or tweak_data.upgrades.on_killshot_cooldown_reduction or 0
+	
 	if self._on_killshot_t and t < self._on_killshot_t then
-		self._on_killshot_t = self._on_killshot_t - (tweak_data.upgrades.on_killshot_cooldown_reduction or 0)
+		self._on_killshot_t = self._on_killshot_t - killshot_cooldown_reduction
 		return
 	end
 
@@ -1120,12 +1121,12 @@ function PlayerManager:check_enduring()
 			self._assaults_to_extra_revive = math.max(self._assaults_to_extra_revive - 1, 0)
 			if self._assaults_to_extra_revive == 0 then
 				damage_ext:add_revive()
-				managers.hud:show_hint( { text = "Assaults Survived- Restoring 1 Down" } )
+				managers.hud:show_hint( { text = managers.localization:text("hud_assault_restored_down") } )
 				self._assaults_to_extra_revive = Global.game_settings.single_player and 1 or 2
 			elseif self._assaults_to_extra_revive == 1 then
-				managers.hud:show_hint( { text = "1 Assault Remaining Until Down Restore." } )
+				managers.hud:show_hint( { text = managers.localization:text("hud_assault_remaining_single") } )
 			else
-				managers.hud:show_hint( { text = tostring(self._assaults_to_extra_revive) .. " Assaults Remaining Until Down Restore." } )
+				managers.hud:show_hint( { text = tostring(self._assaults_to_extra_revive) .. managers.localization:text("hud_assault_remaining_plural") } )
 			end
 		end
 	end
